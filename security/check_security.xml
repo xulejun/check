@@ -1,0 +1,35 @@
+<odoo>
+    <data noupdate="0">
+         <record id="module_category_check" model="ir.module.category">
+            <field name="name">考勤系统</field>
+        </record>
+
+        <record id="group_staff" model="res.groups">
+            <field name="name">员工/普通用户</field>
+            <field name="category_id" ref="module_category_check"/>
+            <field name="implied_ids" eval="[(4,ref('base.group_user'))]"/>
+            <field name="users" eval="[(4,ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_department_manager" model="res.groups">
+            <field name="name">部门经理</field>
+            <field name="category_id" ref="module_category_check"/>
+            <field name="implied_ids" eval="[(4,ref('base.group_user')),(4,ref('check.group_staff'))]"/>
+            <field name="users" eval="[(4,ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_coordinate" model="res.groups">
+            <field name="name">协调人</field>
+            <field name="category_id" ref="module_category_check"/>
+            <field name="implied_ids" eval="[(4,ref('base.group_user'))]"/>
+            <field name="users" eval="[(4,ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_manager" model="res.groups">
+            <field name="name">管理员</field>
+            <field name="implied_ids" eval="[(4,ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_category_check"/>
+            <field name="users" eval="[(4,ref('base.user_root')),(4,ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

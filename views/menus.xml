@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="action_check_file" model="ir.actions.act_window">
+            <field name="name">员工档案</field>
+            <field name="res_model">check.file</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <record id="action_check_unusual" model="ir.actions.act_window">
+            <field name="name">考勤异常</field>
+            <field name="res_model">check.unusual</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <record id="action_check_detail" model="ir.actions.act_window">
+            <field name="name">考勤明细</field>
+            <field name="res_model">check.detail</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <record id="action_check_apply" model="ir.actions.act_window">
+            <field name="name">补卡申请</field>
+            <field name="res_model">check.apply</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <record id="action_check_department" model="ir.actions.act_window">
+            <field name="name">部门信息</field>
+            <field name="res_model">check.department</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <record id="action_check_syn" model="ir.actions.act_window">
+            <field name="name">信息同步</field>
+            <field name="res_model">check.syn</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <record id="action_check_permission" model="ir.actions.act_window">
+            <field name="name">权限设置</field>
+            <field name="res_model">check.permission</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <!--        定时任务——员工信息-->
+        <record id="ir_cron_generate_action" model="ir.cron">
+            <field name="name">员工基本信息自动同步</field>
+            <field name="model_id" ref="model_check_file"/>
+            <field name="state">code</field>
+            <field name="code">model.button_create_user()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field name="user_id" ref="base.user_root"/>
+        </record>
+
+        <menuitem id="menu_check" name="考勤系统"/>
+        <menuitem id="menu_check_system" name="系统设置" parent="menu_check" sequence="26"/>
+
+        <menuitem action="action_check_file" id="submenu_check_file" name="员工档案" parent="menu_check" sequence="10"/>
+
+        <menuitem action="action_check_detail" id="submenu_check_detail" name="考勤明细" parent="menu_check" sequence="15"/>
+
+        <menuitem action="action_check_unusual" id="submenu_check_unusual" name="考勤异常" parent="menu_check"
+                  sequence="20"/>
+
+        <menuitem action="action_check_apply" id="submenu_check_apply" name="补卡申请" parent="menu_check" sequence="25"/>
+
+        <menuitem action="action_check_department" id="submenu_check_department" name="部门信息" parent="menu_check_system"
+                  sequence="28"/>
+
+        <menuitem action="action_check_syn" id="submenu_check_syn" name="信息同步" parent="menu_check_system"
+                  sequence="30"/>
+
+        <menuitem action="action_check_permission" id="submenu_check_permission" name="权限设置" parent="menu_check_system"
+                  sequence="35"/>
+    </data>
+</odoo>

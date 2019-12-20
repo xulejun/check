@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+acc_check_file,check.file,model_check_file,,1,1,1,1
+acc_check_unusual,check.unusual,model_check_unusual,,1,1,1,1
+acc_check_detail,check.detail,model_check_detail,,1,1,1,1
+acc_check_apply,check.apply,model_check_apply,,1,1,1,1
+acc_check_department,check.department,model_check_department,,1,1,1,1
+acc_check_syn,check.syn,model_check_syn,,1,1,1,1
+acc_check_permission,check.permission,model_check_permission,,1,1,1,1
+
+

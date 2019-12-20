@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!--        1.员工档案tree视图-->
+        <record id="check_file_tree" model="ir.ui.view">
+            <field name="name">员工档案tree</field>
+            <field name="model">check.file</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="员工档案tree">
+                    <field name="job_id"/>
+                    <field name="name"/>
+                    <field name="department"/>
+                    <field name="number"/>
+                </tree>
+            </field>
+        </record>
+        <!--        1.员工档案form视图-->
+        <record id="check_file_form" model="ir.ui.view">
+            <field name="name">员工档案form</field>
+            <field name="model">check.file</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="员工档案form">
+                    <header>
+                        <button name="button_create_user" type="object" string="Create_user"/>
+                    </header>
+                    <group>
+                        <field name="job_id"/>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="department"/>
+                        <field name="number"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <!--        2.考勤异常tree视图-->
+        <record id="check_unusual_tree" model="ir.ui.view">
+            <field name="name">考勤异常tree</field>
+            <field name="model">check.unusual</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="考勤异常tree">
+                    <field name="job_id"/>
+                    <field name="name"/>
+                    <field name="ex_time"/>
+                    <field name="replaced_card"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        3.考勤明细tree视图-->
+        <record id="check_detail_tree" model="ir.ui.view">
+            <field name="name">考勤明细tree</field>
+            <field name="model">check.detail</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="考勤明细tree">
+                    <field name="job_id"/>
+                    <field name="name"/>
+                    <field name="first_time"/>
+                    <field name="second_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--        4.补卡申请tree视图-->
+        <record id="check_apply_tree" model="ir.ui.view">
+            <field name="name">补卡申请tree</field>
+            <field name="model">check.apply</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="补卡申请tree">
+                    <field name="job_id"/>
+                    <field name="name"/>
+                    <field name="ex_time"/>
+                    <field name="ex_reason"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <!--        4.补卡申请form视图-->
+        <record id="check_apply_form" model="ir.ui.view">
+            <field name="name">补卡申请form</field>
+            <field name="model">check.apply</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="补卡申请form">
+                    <header>
+                        <button name="button_submit" states="draft" string="提交" type="object" class="oe_highlight"/>
+                        <button name="button_pass" states="confirm" string="批准" type="object" class="oe_highlight"/>
+                        <button name="button_fail" states="confirm" string="拒绝" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,reject,complete"/>
+                    </header>
+                    <sheet>
+                        <group name="group_top" string="补卡申请单详情">
+                            <group>
+                                <field name="job_id"/>
+                                <field name="name"/>
+                                <field name="ex_time"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="原因">
+                                <field name="ex_reason"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!--        5.部门信息表tree视图-->
+        <record id="check_department_tree" model="ir.ui.view">
+            <field name="name">部门信息tree</field>
+            <field name="model">check.department</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="部门信息Tree" editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <!--       向res.users模型添加字段-->
+        <record id="building_list_view" model="ir.ui.view">
+            <field name="name">building.list.view</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="(//page[@name='access_rights'])" position="before">
+                    <page string="考勤系统">
+                        <group>
+                            <field name="name"/>
+                            <field name="department"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
