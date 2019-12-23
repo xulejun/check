@@ -1,7 +1,7 @@
+import datetime
+import time
 import urllib.request
-
 import json
-
 import requests
 
 access_token = ''
@@ -11,8 +11,8 @@ def get_token():
     '''获取钉钉的token
     :return: 钉钉token'''
 
-    appkey = 'dingeqvytro5lbiriu8o'
-    appsecret = 'hnTUfB-kQnwO3mXFtQnZJPGs5Ph4ZFsUAgwhiFVxQVbAaJLlc8WsZdo_F8GxJGbG'
+    appkey = 'dingtvtbzlvg3tniqrlw'
+    appsecret = 'OU8_YMl34gJici3N7cCQeJOqq8Ego08GJ-Y9f_6xwClpa1I6QzTAi9s9Swpa9VNc'
     global access_token
     headers = {
         'Content-Type': 'application/json',
@@ -67,12 +67,30 @@ def get_department_user():
                 if department_id == key:
                     dept_name_list.append(dept_id_name_list[key])
             if user:
-                id_list.append(userlist[i]['jobnumber'])
+                id_list.append(userlist[i]['userid'])
                 name_list.append(userlist[i]['name'])
                 i += 1
             else:
                 print()
+    # print(id_list)
+    # print(name_list)
+    # print(dept_name_list)
     return id_list, name_list, dept_name_list
+
+
+def get_users_name():
+    users_id = get_users_id()
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    users_name = []
+    for user_id in users_id:
+        url = 'https://oapi.dingtalk.com/user/get?access_token=%s&userid=%s' % (access_token, user_id)
+        req = requests.get(url, headers=headers)
+        list1 = json.loads(req.text)
+        users_name.append(list1['name'])
+    # print(users_name)
+    return users_name
 
 
 def get_users_id():
@@ -92,20 +110,79 @@ def get_users_id():
 def get_attendance_list():
     user_ids = get_users_id()
     headers = {
-        "userIds": user_ids,
-        "checkDateFrom": "2019-12-20 00:00:00",
-        "checkDateTo": "2019-12-21 00:00:00",
-        "isI18n": "false"
+        "workDateFrom": "2019-12-23 00:00:00",
+        "workDateTo": "2019-12-24 00:00:00",
+        "userIdList": user_ids,
+        "offset": "0",
+        "limit": "50"
     }
-    url = 'https://oapi.dingtalk.com/attendance/listRecord?access_token=%s' % (access_token)
+    url = 'https://oapi.dingtalk.com/attendance/list?access_token=%s' % (access_token)
     req = requests.post(url, json.dumps(headers))
     result = json.loads(req.text)
     result_json = json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False)  # 以json的格式输出
-    print(result_json)
+    userlist = result.get('recordresult')
+    result1_json = json.dumps(userlist, indent=2, sort_keys=True, ensure_ascii=False)  # 以json的格式输出
+    # print(result1_json)
+    id_list = []
+    first_times = []
+    second_times = []
+    i = 0
+    for user in userlist:
+        if user and userlist[i]['checkType'] == 'OnDuty':
+            user_time1_str = str(userlist[i]['userCheckTime'])
+            time1_stamp = int(user_time1_str[0:10])
+            time1_array = time.localtime(time1_stamp)
+            get_time1 = time.strftime("%Y-%m-%d %H:%M:%S", time1_array)
+            first_times.append(get_time1)
+            if userlist[i]['userId'] not in id_list:
+                id_list.append(userlist[i]['userId'])
+                i += 1
+        elif userlist[i]['checkType'] == 'OffDuty':
+            user_time2_str = str(userlist[i]['userCheckTime'])
+            time2_stamp = int(user_time2_str[0:10])
+            time2_array = time.localtime(time2_stamp)
+            get_time2 = time.strftime("%Y-%m-%d %H:%M:%S", time2_array)
+            second_times.append(get_time2)
+            i += 1
+    return id_list, first_times, second_times
+
+
+def get_unusual():
+    user_ids = get_users_id()
+    headers = {
+        "workDateFrom": "2019-12-23 00:00:00",
+        "workDateTo": "2019-12-24 00:00:00",
+        "userIdList": user_ids,
+        "offset": "0",
+        "limit": "50"
+    }
+    url = 'https://oapi.dingtalk.com/attendance/list?access_token=%s' % (access_token)
+    req = requests.post(url, json.dumps(headers))
+    result = json.loads(req.text)
+    result_json = json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False)  # 以json的格式输出
+    userlist = result.get('recordresult')
+    result1_json = json.dumps(userlist, indent=2, sort_keys=True, ensure_ascii=False)  # 以json的格式输出
+    print(result1_json)
+    id_list = []
+    unusual_time = []
+    i = 0
+    for user in userlist:
+        if user and userlist[i]['timeResult'] == 'NotSigned' or userlist[i]['timeResult'] == 'Early' or userlist[i]['timeResult'] == 'Late':
+            id_list.append(userlist[i]['userId'])
+            user_time1_str = str(userlist[i]['userCheckTime'])
+            time1_stamp = int(user_time1_str[0:10])
+            time1_array = time.localtime(time1_stamp)
+            get_time1 = time.strftime("%Y-%m-%d %H:%M:%S", time1_array)
+            unusual_time.append(get_time1)
+            i += 1
+    print(id_list)
+    print(unusual_time)
 
 
 get_token()
 get_department()
 get_department_user()
 get_users_id()
+get_users_name()
 get_attendance_list()
+get_unusual()

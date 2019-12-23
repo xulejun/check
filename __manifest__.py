@@ -34,4 +34,6 @@
     'demo': [
         'demo/demo.xml',
     ],
+    'application': True,
+    'sequence': 1
 }

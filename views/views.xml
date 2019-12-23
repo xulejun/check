@@ -23,7 +23,7 @@
             <field name="arch" type="xml">
                 <form string="员工档案form">
                     <header>
-                        <button name="button_create_user" type="object" string="Create_user"/>
+                        <button name="button_create_user" type="object" string="同步员工档案信息"/>
                     </header>
                     <group>
                         <field name="job_id"/>
@@ -51,7 +51,27 @@
                 </tree>
             </field>
         </record>
-
+         <!--        3.考勤异常form视图-->
+        <record id="check_unusual_form" model="ir.ui.view">
+            <field name="name">考勤异常form视图</field>
+            <field name="model">check.unusual</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="考勤异常form">
+                    <header>
+                        <button name="button_unusual_time" type="object" string="同步考勤明细"/>
+                    </header>
+                    <group>
+                        <field name="job_id"/>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="ex_time"/>
+                        <field name="replaced_card"/>
+                    </group>
+                </form>
+            </field>
+        </record>
         <!--        3.考勤明细tree视图-->
         <record id="check_detail_tree" model="ir.ui.view">
             <field name="name">考勤明细tree</field>
@@ -66,7 +86,27 @@
                 </tree>
             </field>
         </record>
-
+        <!--        3.考勤明细form视图-->
+        <record id="check_detail_form" model="ir.ui.view">
+            <field name="name">考勤明细form</field>
+            <field name="model">check.detail</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="考勤明细form">
+                    <header>
+                        <button name="button_create_attend" type="object" string="同步考勤明细"/>
+                    </header>
+                    <group>
+                        <field name="job_id"/>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="first_time"/>
+                        <field name="second_time"/>
+                    </group>
+                </form>
+            </field>
+        </record>
         <!--        4.补卡申请tree视图-->
         <record id="check_apply_tree" model="ir.ui.view">
             <field name="name">补卡申请tree</field>
@@ -82,6 +122,7 @@
                 </tree>
             </field>
         </record>
+
         <!--        4.补卡申请form视图-->
         <record id="check_apply_form" model="ir.ui.view">
             <field name="name">补卡申请form</field>
