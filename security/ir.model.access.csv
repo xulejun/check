@@ -6,6 +6,6 @@ acc_check_detail,check.detail,model_check_detail,,1,1,1,1
 acc_check_apply,check.apply,model_check_apply,,1,1,1,1
 acc_check_department,check.department,model_check_department,,1,1,1,1
 acc_check_syn,check.syn,model_check_syn,,1,1,1,1
-acc_check_permission,check.permission,model_check_permission,,1,1,1,1
+
 
 

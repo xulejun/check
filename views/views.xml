@@ -51,7 +51,7 @@
                 </tree>
             </field>
         </record>
-         <!--        3.考勤异常form视图-->
+         <!--        2.考勤异常form视图-->
         <record id="check_unusual_form" model="ir.ui.view">
             <field name="name">考勤异常form视图</field>
             <field name="model">check.unusual</field>
@@ -59,7 +59,7 @@
             <field name="arch" type="xml">
                 <form string="考勤异常form">
                     <header>
-                        <button name="button_unusual_time" type="object" string="同步考勤明细"/>
+                        <button name="button_create_unusual" type="object" string="同步考勤异常"/>
                     </header>
                     <group>
                         <field name="job_id"/>
@@ -159,9 +159,35 @@
             <field name="model">check.department</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="部门信息Tree" editable="bottom">
-                    <field name="name"/>
+                <tree string="部门信息Tree">
+                   <field name="name"/>
                 </tree>
+            </field>
+        </record>
+         <!--        5.部门信息表form视图-->
+        <record id="check_department_form" model="ir.ui.view">
+            <field name="name">部门信息表form</field>
+            <field name="model">check.department</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="部门信息Form">
+                     <header>
+                        <button name="button_create_department" type="object" string="同步考勤明细"/>
+                    </header>
+                </form>
+            </field>
+        </record>
+         <!--        5.权限设置form视图-->
+        <record id="res_users_form" model="ir.ui.view">
+            <field name="name">权限设置form</field>
+            <field name="model">res.users</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                 <form string="权限设置form">
+                     <header>
+                        <button name="button_create_user_dept" type="object" string="同步用户权限信息"/>
+                    </header>
+                </form>
             </field>
         </record>
         <!--       向res.users模型添加字段-->
@@ -173,8 +199,8 @@
                 <xpath expr="(//page[@name='access_rights'])" position="before">
                     <page string="考勤系统">
                         <group>
-                            <field name="name"/>
-                            <field name="department"/>
+                            <field name="test_name"/>
+<!--                            <field name="department"/>-->
                         </group>
                     </page>
                 </xpath>

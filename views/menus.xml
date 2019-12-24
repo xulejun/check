@@ -45,17 +45,44 @@
         </record>
         <record id="action_check_permission" model="ir.actions.act_window">
             <field name="name">权限设置</field>
-            <field name="res_model">check.permission</field>
+            <field name="res_model">res.users</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5,0,0),
+                          (0,0,{'view_mode':'tree', 'view_id': ref('base.view_users_tree')}),
+                          (0,0,{'view_mode':'form', 'view_id': ref('base.view_users_form')})]"/>
             <field name="target">current</field>
         </record>
         <!--        定时任务——员工信息-->
-        <record id="ir_cron_generate_action" model="ir.cron">
+        <record id="ir_cron_file_action" model="ir.cron">
             <field name="name">员工基本信息自动同步</field>
             <field name="model_id" ref="model_check_file"/>
             <field name="state">code</field>
             <field name="code">model.button_create_user()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field name="user_id" ref="base.user_root"/>
+        </record>
+        <!--        定时任务——考勤明细-->
+        <record id="ir_cron_detail_action" model="ir.cron">
+            <field name="name">考勤明细自动同步</field>
+            <field name="model_id" ref="model_check_detail"/>
+            <field name="state">code</field>
+            <field name="code">model.button_create_attend()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="True" name="doall"/>
+            <field name="user_id" ref="base.user_root"/>
+        </record>
+        <!--        定时任务——考勤异常-->
+        <record id="ir_cron_unusual_action" model="ir.cron">
+            <field name="name">考勤异常自动同步</field>
+            <field name="model_id" ref="model_check_unusual"/>
+            <field name="state">code</field>
+            <field name="code">model.button_create_unusual()</field>
             <field name="interval_number">30</field>
             <field name="interval_type">minutes</field>
             <field name="numbercall">-1</field>
