@@ -14,7 +14,7 @@
         <record id="group_department_manager" model="res.groups">
             <field name="name">部门经理</field>
             <field name="category_id" ref="module_category_check"/>
-            <field name="implied_ids" eval="[(4,ref('base.group_user')),(4,ref('check.group_staff'))]"/>
+            <field name="implied_ids" eval="[(4,ref('base.group_user'))]"/>
             <field name="users" eval="[(4,ref('base.user_root'))]"/>
         </record>
 

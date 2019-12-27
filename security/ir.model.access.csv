@@ -1,11 +1,29 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-acc_check_file,check.file,model_check_file,,1,1,1,1
-acc_check_unusual,check.unusual,model_check_unusual,,1,1,1,1
-acc_check_detail,check.detail,model_check_detail,,1,1,1,1
-acc_check_apply,check.apply,model_check_apply,,1,1,1,1
-acc_check_department,check.department,model_check_department,,1,1,1,1
-acc_check_syn,check.syn,model_check_syn,,1,1,1,1
+check_department,check.department,model_check_department,,1,1,1,1
+
+staff_check_unusual,staff.check.unusual,model_check_unusual,group_staff,1,0,0,0
+staff_check_detail,staff.check.detail,model_check_detail,group_staff,1,0,0,0
+staff_check_apply,staff.check.apply,model_check_apply,group_staff,1,1,1,1
+staff_check_syn,staff.check.syn,model_check_syn,group_staff,1,1,1,1
+
+department_check_file,department.check.file,model_check_file,group_department_manager,1,1,1,1
+department_check_unusual,department.check.unusual,model_check_unusual,group_department_manager,1,1,1,1
+department_check_detail,department.check.detail,model_check_detail,group_department_manager,1,1,1,1
+department_check_apply,department.check.apply,model_check_apply,group_department_manager,1,1,1,1
+department_check_syn,department.check.syn,model_check_syn,group_department_manager,1,1,1,1
+
+coordinate_check_file,coordinate.check.file,model_check_file,group_coordinate,1,1,1,1
+coordinate_check_unusual,coordinate.check.unusual,model_check_unusual,group_coordinate,1,1,1,1
+coordinate_check_detail,coordinate.check.detail,model_check_detail,group_coordinate,1,1,1,1
+coordinate_check_apply,coordinate.check.apply,model_check_apply,group_coordinate,1,1,1,1
+
+manager_check_file,manager.check.file,model_check_file,group_manager,1,1,1,1
+manager_check_unusual,manager.check.unusual,model_check_unusual,group_manager,1,1,1,1
+manager_check_detail,manager.check.detail,model_check_detail,group_manager,1,1,1,1
+manager_check_apply,manager.check.apply,model_check_apply,group_manager,1,1,1,1
+manager_check_syn,manager.check.syn,model_check_syn,group_manager,1,1,1,1
+
 
 
 

@@ -4,7 +4,7 @@
         <record id="check_unusual_staff_rule" model="ir.rule">
             <field name="name">员工考勤异常-记录规则</field>
             <field name="model_id" ref="model_check_unusual"/>
-            <field name="domain_force">[('create_uid','=',user.id)]</field>
+            <field name="domain_force">[('ex_time','=',user.test_name)]</field>
             <field name="groups" eval="[(4,ref('group_staff'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -14,7 +14,17 @@
         <record id="check_detail_staff_rule" model="ir.rule">
             <field name="name">员工考勤明细-记录规则</field>
             <field name="model_id" ref="model_check_detail"/>
-            <field name="domain_force">[('create_uid','=',user.id)]</field>
+            <field name="domain_force">[('name','=',user.test_name)]</field>
+            <field name="groups" eval="[(4,ref('group_staff'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        <record id="check_apply_staff_rule" model="ir.rule">
+            <field name="name">员工补卡申请-记录规则</field>
+            <field name="model_id" ref="model_check_apply"/>
+            <field name="domain_force">[('name','=',user.test_name)]</field>
             <field name="groups" eval="[(4,ref('group_staff'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -22,10 +32,20 @@
             <field name="perm_unlink" eval="True"/>
         </record>
         <!--        二、部门经理-->
+        <record id="check_file_department_manager_rule" model="ir.rule">
+            <field name="name">部门经理员工档案-记录规则</field>
+            <field name="model_id" ref="model_check_file"/>
+            <field name="domain_force">[('department','=',user.test_department)]</field>
+            <field name="groups" eval="[(4,ref('group_department_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
         <record id="check_unusual_department_manager_rule" model="ir.rule">
             <field name="name">部门经理考勤异常-记录规则</field>
             <field name="model_id" ref="model_check_unusual"/>
-            <field name="domain_force">[('department','=', user.department.name)]</field>
+            <field name="domain_force">[('department','=', user.test_department)]</field>
             <field name="groups" eval="[(4,ref('group_department_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -35,17 +55,7 @@
         <record id="check_detail_department_manager_rule" model="ir.rule">
             <field name="name">部门经理考勤明细-记录规则</field>
             <field name="model_id" ref="model_check_detail"/>
-            <field name="domain_force">[('department','=',user.department.name)]</field>
-            <field name="groups" eval="[(4,ref('group_department_manager'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
-        <record id="check_file_department_manager_rule" model="ir.rule">
-            <field name="name">部门经理员工档案-记录规则</field>
-            <field name="model_id" ref="model_check_file"/>
-            <field name="domain_force">[('department','=',user.department.name)]</field>
+            <field name="domain_force">[('department','=', user.test_department)]</field>
             <field name="groups" eval="[(4,ref('group_department_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -55,7 +65,7 @@
         <record id="check_apply_department_manager_rule" model="ir.rule">
             <field name="name">部门经理补卡申请-记录规则</field>
             <field name="model_id" ref="model_check_apply"/>
-            <field name="domain_force">[('department','=',user.department.name)]</field>
+            <field name="domain_force">[('department','=',user.test_department)]</field>
             <field name="groups" eval="[(4,ref('group_department_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

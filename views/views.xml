@@ -22,9 +22,6 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="员工档案form">
-                    <header>
-                        <button name="button_create_user" type="object" string="同步员工档案信息"/>
-                    </header>
                     <group>
                         <field name="job_id"/>
                         <field name="name"/>
@@ -45,28 +42,27 @@
             <field name="arch" type="xml">
                 <tree string="考勤异常tree">
                     <field name="job_id"/>
-                    <field name="name"/>
                     <field name="ex_time"/>
+                    <field name="department"/>
+                    <field name="name"/>
+                    <field name="ex_state"/>
                     <field name="replaced_card"/>
                 </tree>
             </field>
         </record>
-         <!--        2.考勤异常form视图-->
+        <!--        2.考勤异常form视图-->
         <record id="check_unusual_form" model="ir.ui.view">
             <field name="name">考勤异常form视图</field>
             <field name="model">check.unusual</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="考勤异常form">
-                    <header>
-                        <button name="button_create_unusual" type="object" string="同步考勤异常"/>
-                    </header>
                     <group>
                         <field name="job_id"/>
-                        <field name="name"/>
+                        <field name="ex_time"/>
                     </group>
                     <group>
-                        <field name="ex_time"/>
+                        <field name="name"/>
                         <field name="replaced_card"/>
                     </group>
                 </form>
@@ -81,6 +77,7 @@
                 <tree string="考勤明细tree">
                     <field name="job_id"/>
                     <field name="name"/>
+                    <field name="department"/>
                     <field name="first_time"/>
                     <field name="second_time"/>
                 </tree>
@@ -93,9 +90,6 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="考勤明细form">
-                    <header>
-                        <button name="button_create_attend" type="object" string="同步考勤明细"/>
-                    </header>
                     <group>
                         <field name="job_id"/>
                         <field name="name"/>
@@ -116,6 +110,7 @@
                 <tree string="补卡申请tree">
                     <field name="job_id"/>
                     <field name="name"/>
+                    <field name="department"/>
                     <field name="ex_time"/>
                     <field name="ex_reason"/>
                     <field name="state"/>
@@ -132,8 +127,10 @@
                 <form string="补卡申请form">
                     <header>
                         <button name="button_submit" states="draft" string="提交" type="object" class="oe_highlight"/>
-                        <button name="button_pass" states="confirm" string="批准" type="object" class="oe_highlight"/>
-                        <button name="button_fail" states="confirm" string="拒绝" type="object" class="oe_highlight"/>
+                        <button name="button_pass" states="confirm" string="批准" type="object" class="oe_highlight"
+                                groups="check.group_department_manager,check.group_coordinate,check.group_manager"/>
+                        <button name="button_fail" states="confirm" string="拒绝" type="object" class="oe_highlight"
+                                groups="check.group_department_manager,check.group_coordinate,check.group_manager"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirm,reject,complete"/>
                     </header>
                     <sheet>
@@ -141,6 +138,7 @@
                             <group>
                                 <field name="job_id"/>
                                 <field name="name"/>
+                                <field name="department"/>
                                 <field name="ex_time"/>
                             </group>
                         </group>
@@ -153,40 +151,29 @@
                 </form>
             </field>
         </record>
-        <!--        5.部门信息表tree视图-->
+         <!--        4.1.部门信息tree视图-->
         <record id="check_department_tree" model="ir.ui.view">
             <field name="name">部门信息tree</field>
             <field name="model">check.department</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="部门信息Tree">
-                   <field name="name"/>
+                <tree string="部门信息tree">
+                    <field name="department_id"/>
+                    <field name="department_name"/>
                 </tree>
             </field>
         </record>
-         <!--        5.部门信息表form视图-->
-        <record id="check_department_form" model="ir.ui.view">
-            <field name="name">部门信息表form</field>
-            <field name="model">check.department</field>
-            <field name="type">form</field>
+        <!--        5、信息同步-->
+        <record model="ir.ui.view" id="wizard_form_view">
+            <field name="name">wizard.form</field>
+            <field name="model">check.syn</field>
             <field name="arch" type="xml">
-                 <form string="部门信息Form">
-                     <header>
-                        <button name="button_create_department" type="object" string="同步考勤明细"/>
-                    </header>
-                </form>
-            </field>
-        </record>
-         <!--        5.权限设置form视图-->
-        <record id="res_users_form" model="ir.ui.view">
-            <field name="name">权限设置form</field>
-            <field name="model">res.users</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                 <form string="权限设置form">
-                     <header>
-                        <button name="button_create_user_dept" type="object" string="同步用户权限信息"/>
-                    </header>
+                <form string="信息同步">
+                    <footer>
+                        <button name="button_create_file" type="object" string="信息同步" class="oe_highlight"/>
+                        or
+                        <button special="cancel" string="取消" type="object"/>
+                    </footer>
                 </form>
             </field>
         </record>
@@ -200,7 +187,8 @@
                     <page string="考勤系统">
                         <group>
                             <field name="test_name"/>
-<!--                            <field name="department"/>-->
+                            <field name="test_id"/>
+                            <field name="test_department"/>
                         </group>
                     </page>
                 </xpath>
