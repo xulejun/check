@@ -78,6 +78,7 @@
                     <field name="job_id"/>
                     <field name="name"/>
                     <field name="department"/>
+<!--                    <field name="department_id"/>-->
                     <field name="first_time"/>
                     <field name="second_time"/>
                 </tree>
@@ -90,6 +91,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="考勤明细form">
+                    <button name="test" string="提交" type="object" class="oe_highlight"/>
                     <group>
                         <field name="job_id"/>
                         <field name="name"/>
@@ -189,6 +191,8 @@
                             <field name="test_name"/>
                             <field name="test_id"/>
                             <field name="test_department"/>
+                            <field name="test_all_department"/>
+                            <field name="test_department_id"/>
                         </group>
                     </page>
                 </xpath>

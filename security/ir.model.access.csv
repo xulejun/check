@@ -2,6 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 check_department,check.department,model_check_department,,1,1,1,1
 
+staff_check_file,staff.check.file,model_check_file,group_staff,1,1,1,1
 staff_check_unusual,staff.check.unusual,model_check_unusual,group_staff,1,0,0,0
 staff_check_detail,staff.check.detail,model_check_detail,group_staff,1,0,0,0
 staff_check_apply,staff.check.apply,model_check_apply,group_staff,1,1,1,1

@@ -57,6 +57,7 @@ def get_department_user():
     name_list = []
     dept_id_name_list = dict(zip(department_id_list, department_name_list))
     dept_name_list = []
+    dept_id_list = []
     for department in department_id_list:
         department_id = department
         url = 'https://oapi.dingtalk.com/user/listbypage?access_token=%s&department_id=%s&offset=0&size=100' % (
@@ -64,21 +65,25 @@ def get_department_user():
         req = requests.get(url, headers=headers)
         list1 = json.loads(req.text)
         userlist = list1.get('userlist')
+
         i = 0
         for user in userlist:
             for key in dept_id_name_list:
                 if department_id == key:
                     dept_name_list.append(dept_id_name_list[key])
+                    dept_id_list.append(department_id)
             if user:
                 id_list.append(userlist[i]['userid'])
                 name_list.append(userlist[i]['name'])
                 i += 1
             else:
                 print()
+
     # print(id_list)
     # print(name_list)
+    # print(dept_id_list)
     # print(dept_name_list)
-    return id_list, name_list, dept_name_list
+    return id_list, name_list, dept_name_list, dept_id_list
 
 
 def get_users_name():

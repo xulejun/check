@@ -41,11 +41,16 @@ class Detail(models.Model):
     _name = 'check.detail'
     _description = '考勤明细表'
 
-    department = fields.Char('部门')
     job_id = fields.Char('员工id')
     name = fields.Char('姓名')
+    department = fields.Char('部门', store=True)
+    department_id = fields.Char('部门id', store=True)
     first_time = fields.Char('打卡时间一')
     second_time = fields.Char('打卡时间二')
+
+    def test(self):
+        print(self.department_id)
+        print(self.env.user.test_department)
 
 
 class Apply(models.Model):
@@ -63,6 +68,10 @@ class Apply(models.Model):
                              track_visibility='onchange')
 
     def button_submit(self):
+        file_rec = self.env['check.file'].search([])
+        for i in file_rec:
+            if self.job_id == i.job_id and i.number == 0:
+                raise exceptions.ValidationError("该用户补卡次数不够")
         return self.write({'state': 'confirm'})
 
     def button_pass(self):
@@ -104,15 +113,29 @@ class Syn(models.Model):
 
     @api.multi
     def button_create_file(self):
+
         # 权限用户
-        user_id_list, user_name_list, user_dept_list = get_department_user()
+        user_id_list, user_name_list, user_dept_list, dept_id_list = get_department_user()
         id_name_dept = user_id_list + user_name_list + user_dept_list
+        dept_ids, dept_names = get_department()
+        parent_list = get_parent_ids()
         i = 0
         for num in user_id_list:
             if num:
                 user_id = id_name_dept[i]
                 user_name = id_name_dept[i + len(user_id_list)]
                 user_dept = id_name_dept[i + 2 * len(user_id_list)]
+                for parent in parent_list:
+                    parent_ids = parent['parentIds']
+                    get_dept_name = ''
+                    for parent_id in parent_ids:
+                        j = 0
+                        for dept_id in dept_ids:
+                            if parent_id == dept_id:
+                                get_dept_name += ' / ' + dept_names[j]
+                                break
+                            else:
+                                j += 1
                 user_record = self.env["res.users"].search([('login', '=', user_name), ('test_id', '=', user_id)])
                 if user_record:
                     print()
@@ -124,13 +147,15 @@ class Syn(models.Model):
                         partner_record = self.env["res.partner"].create({"name": user_name, "company_id": 1})
                     self.env['res.users'].create(
                         {'login': user_name, 'name': user_name, 'test_id': user_id, 'test_name': user_name,
-                         'test_department': user_dept, "company_id": 1, "partner_id": partner_record.id,
+                         'test_department': user_dept, 'test_all_department': get_dept_name,
+                         'test_department_id': parent_ids, "company_id": 1,
+                         "partner_id": partner_record.id,
                          "password": "123"})
                 i += 1
             else:
                 print()
         # 员工档案同步
-        user_id_list, user_name_list, user_dept_list = get_department_user()
+        user_id_list, user_name_list, user_dept_list, dept_id_list = get_department_user()
         id_name_dept = user_id_list + user_name_list + user_dept_list
         i = 0
         for num in user_id_list:
@@ -149,7 +174,8 @@ class Syn(models.Model):
                 print()
         # 考勤明细方法
         user_list = get_attendance_list()
-        users_id, users_name, user_dept_list = get_department_user()
+        users_id, users_name, user_dept_list, dept_id_list = get_department_user()
+        dept_ids, dept_names = get_department()
         i = 0
         for user in user_list:
             if user_list[i]['checkType'] == 'OnDuty':
@@ -166,6 +192,7 @@ class Syn(models.Model):
                 if user_id == user_list_id:
                     user_name = users_name[j]
                     user_dept = user_dept_list[j]
+                    user_dept_id = dept_id_list[j]
                 else:
                     j += 1
             if i < len(user_list) - 1 and user_list[i + 1]['checkType'] == 'OffDuty':
@@ -177,18 +204,19 @@ class Syn(models.Model):
                 time2 = datetime2_obj.strftime('%Y-%m-%d %H:%M:%S')
             user_record = self.env["check.detail"].search(
                 [('job_id', '=', user_id), ('name', '=', user_name), ('department', '=', user_dept),
+                 ('department_id', '=', user_dept_id),
                  ('first_time', '=', time1),
                  ('second_time', '=', time2)])
             if user_record:
                 print()
             else:
                 self.env['check.detail'].create(
-                    {'job_id': user_id, 'name': user_name, 'department': user_dept, 'first_time': time1,
-                     'second_time': time2})
+                    {'job_id': user_id, 'name': user_name, 'department': user_dept, 'department_id': user_dept_id,
+                     'first_time': time1, 'second_time': time2})
             i += 1
         # 考勤异常获取方法
         user_list = get_attendance_list()
-        users_id, users_name, user_dept_list = get_department_user()
+        users_id, users_name, user_dept_list, dept_id_list = get_department_user()
         for user in user_list:
             if user['timeResult'] != 'Normal':
                 user_id = user['userId']
@@ -218,17 +246,23 @@ class Syn(models.Model):
         # 部门信息同步
         dept_ids, dept_names = get_department()
         parent_list = get_parent_ids()
-        i = 0
-        for dept_id in dept_ids:
-            get_parent_id = parent_list[i]['parentIds']
-            get_dept_name = dept_names[i]
+        for parent in parent_list:
+            parent_ids = parent['parentIds']
+            get_dept_name = ''
+            for parent_id in parent_ids:
+                j = 0
+                for dept_id in dept_ids:
+                    if parent_id == dept_id:
+                        get_dept_name += ' / ' + dept_names[j]
+                        break
+                    else:
+                        j += 1
             user_record = self.env["check.department"].search(
-                [('department_id', '=', get_parent_id), ('department_name', '=', get_dept_name)])
+                [('department_id', '=', parent_ids), ('department_name', '=', get_dept_name)])
             if user_record:
                 print()
             else:
-                self.env['check.department'].create({'department_id': get_parent_id, 'department_name': get_dept_name})
-            i += 1
+                self.env['check.department'].create({'department_id': parent_ids, 'department_name': get_dept_name})
 
 
 class User(models.Model):
@@ -236,4 +270,6 @@ class User(models.Model):
 
     test_id = fields.Char(string='员工id')
     test_name = fields.Char(string='姓名')
-    test_department = fields.Char(string='部门')
+    test_department = fields.Char(string='部门', store=True)
+    test_all_department = fields.Char(string='所属部门', store=True)
+    test_department_id = fields.Char(string='部门id', store=True)
